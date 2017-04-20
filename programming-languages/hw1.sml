@@ -118,24 +118,57 @@ fun oldest (dates : (int*int*int) list) =
           else SOME (hd dates)
        end;
 
+(* int list -> int list
+   produce the given int list with all duplicates removed. *)
+fun remove_duplicates( months : int list) =
+  let fun is_duplicate(i : int, l : int list) =
+        if null l
+        then false
+        else if (hd l) = i
+        then true
+        else is_duplicate(i, (tl l))
+  in
+      if null months
+      then []
+      else if is_duplicate((hd months), (tl months))
+      then remove_duplicates((tl months))
+      else (hd months) :: remove_duplicates((tl months))
+  end
+
 (* date list * int list -> int
    produces the number of dates in the first argument
    that are in any of the months given in the second
    argument. Duplicated months are not counted. *)
 fun number_in_months_challenge(dates : (int*int*int) list, months : int list) =
-  0;
-
+  number_in_months(dates, remove_duplicates(months));
+      
 (* date list * int list -> date list 
    produces the dates in the given list that fall in
    any of the given months. Duplicated months will not
    be counted *)
 fun dates_in_months_challenge(dates : (int*int*int) list, months : int list) =
-  [];
+  dates_in_months(dates, remove_duplicates(months));
 
 (* date -> bool
    produce true if the given date is a valid date in the
-   Gregorian calendar *)
+   common era Gregorian calendar *)
 fun reasonable_date(date : int*int*int) =
-  false;
-
-        
+  let val normal_months = [31,28,31,30,31,30,31,31,30,31,30,31];
+      val leap_months = [31,29,31,30,31,30,31,31,30,31,30,31];
+      fun is_leap_year(year : int) =
+        year mod 4 = 0 andalso (year mod 400 = 0 orelse (not (year mod 100 = 0)));
+      fun is_month (month : int) =
+        month > 0 andalso month < 13;
+      fun is_day_in_month(day : int, month : int, months : int list) =
+        if month = 1
+        then day > 0 andalso day < ((hd months) + 1)
+        else is_day_in_month(day, month - 1, (tl months));
+  in
+      if #1 date < 1
+      then false
+      else if is_leap_year (#1 date)
+      then is_month(#2 date) andalso
+           is_day_in_month(#3 date, #2 date, leap_months)
+      else is_month(#2 date) andalso
+           is_day_in_month(#3 date, #2 date, normal_months)
+  end

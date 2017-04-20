@@ -38,7 +38,8 @@ val test23 = dates_in_months_challenge ([(2012,2,28),(2013,12,1),(2011,3,31),(20
 
 val test24 = reasonable_date((2012,1,14)) = true;
 val test25 = reasonable_date((2015,2,29)) = false;
-val test26 = reasonable_date((2000,2,29)) = false;
+val test26 = reasonable_date((2000,2,29)) = true;
 val test27 = reasonable_date((2004,2,29)) = true;
 val test28 = reasonable_date((1986,11,30)) = true;
-                                                
+val test29 = reasonable_date((1900,2,29)) = false;
+val test30 = reasonable_date((0,2,3)) = false;

@@ -38,9 +38,15 @@ fun get_substitutions1(substitutions, s) =
    produces a list of strings that has all strings that co-occur with the given
    string within any sublist of the first argument. *)
 fun get_substitutions2(substitutions, s) =
-  [];
-
-
+  let fun helper (subs, s, acc) =
+        case subs of
+            [] => acc
+          | sl::subs' => (case all_except_option(s, sl) of
+                              SOME li => helper(subs', s, acc @ li)
+                            | NONE => helper(subs', s, acc))
+  in
+      helper(substitutions, s, [])
+  end
                       
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)

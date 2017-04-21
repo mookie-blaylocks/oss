@@ -51,23 +51,20 @@ fun get_substitutions2(substitutions, s) =
 (* string list list * (string * string * string) -> (string * string * string) list
    produces a list of full name records {first, middle, last} using the given
    string list list of substitutions and the given full name record. *)
-fun similar_names(substitutions, full_name) =
-  let fun helper(firsts, middle, last, acc) =
-        case firsts of
-            [] => acc
-          | first::firsts' => helper(firsts', middle, last,
-                                     {first=first, middle=middle, last=last}::acc)
+fun similar_names(substitutions, full_name:{first:string,middle:string,last:string}) =
+  let
+      fun helper(first_subs, m, l) =
+        case first_subs of
+            [] => []
+          | f::first_subs' => {first=f, middle=m, last=l}::(helper(first_subs',m,l))
   in
       case full_name of
-          {a, b, c} =>
-          let
-              val first_subs = get_substitutions2(substitutions, a)
-              val acc = full_name
-          in
-              case first_subs of
-                  s::firsts => acc :: {first=s, middle=b, 
-          end
-  end;
+          {first=f, middle=m, last=l} => let
+           val first_subs = f::get_substitutions2(substitutions, f)
+       in
+           helper(first_subs, m, l)
+       end
+  end
                       
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
@@ -81,3 +78,41 @@ datatype move = Discard of card | Draw
 exception IllegalMove
 
 (* put your solutions for problem 2 here *)
+
+(* card -> color
+   produce the color of the given card *)
+fun card_color(c : card) =
+  case c of
+      (Clubs, _) => Black
+    | (Spades, _) => Black
+    | (Hearts, _) => Red
+    | (Diamonds, _) => Red;
+
+(* card -> int
+   produce the value of the given card *)
+fun card_value(c : card) =
+  case c of
+      (_, Num i) => i
+    | (_, Ace) => 11
+    | (_, _) => 10;
+
+(* card list * card * exn -> card list
+   produces the card list with the given card removed. If the
+   card is not present, the exception is thrown. *)
+fun remove_card(cs : card list, c : card, e : exn) =
+  let fun helper(cards, rc, found, acc) =
+        case cards of
+            [] => if found
+                  then acc
+                  else raise IllegalMove
+          | c'::cards' => if c' = rc
+                          then helper(cards', (Spades, Num 1), true, acc)
+                          else helper(cards', rc, found, acc @ [c'])
+  in
+      helper(cs, c, false, [])
+  end;
+
+(* card list -> bool
+   produces true if all cards in the list are of the same color *)
+fun all_same_color(cs : card list) =
+  false;

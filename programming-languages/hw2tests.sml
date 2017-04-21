@@ -57,7 +57,54 @@ val test13 = similar_names([["Jimmy","James","Jim"],
               {first="Bob",middle="James",last="Richardson"},
               {first="Bobby",middle="James",last="Richardson"}];
 
+val test14 = card_color(Clubs, Jack) = Black;
+val test15 = card_color(Spades, Queen) = Black;
+val test16 = card_color(Diamonds, King) = Red;
+val test17 = card_color(Hearts, Ace) = Red;
 
-                
-                 
-              
+val test18 = card_value(Clubs, Ace) = 11;
+val test19 = card_value(Spades, King) = 10;
+val test20 = card_value(Diamonds, Queen) = 10;
+val test21 = card_value(Hearts, Jack) = 10;
+val test22 = card_value(Clubs, Num 9) = 9;
+val test23 = card_value(Spades, Num 2) = 2;
+
+val test24 = remove_card([(Clubs, Ace),
+                          (Spades, King),
+                          (Diamonds, Queen),
+                          (Hearts, Jack)],
+                         (Clubs, Ace),IllegalMove) =
+             [(Spades, King),(Diamonds, Queen),(Hearts, Jack)];
+val test25 = remove_card([(Clubs, Ace),
+                          (Spades, King),
+                          (Diamonds, Queen),
+                          (Hearts, Jack)],
+                         (Spades, King),IllegalMove) =
+             [(Clubs, Ace),(Diamonds, Queen),(Hearts, Jack)];
+val test26 = remove_card([(Clubs, Ace),
+                          (Spades, King),
+                          (Diamonds, Queen),
+                          (Hearts, Jack)],
+                         (Hearts, Jack),IllegalMove) =
+             [(Clubs, Ace),(Spades, King),(Diamonds, Queen)];
+
+val test27 = remove_card([(Clubs, Ace),
+                          (Spades, King),
+                          (Diamonds, Queen),
+                          (Hearts, Jack)],
+                         (Clubs, Num 8), IllegalMove) = []
+             handle IllegalMove => true;
+
+val test28 = all_same_color([(Clubs, Ace),
+                             (Spades, King),
+                             (Clubs, Num 4)]) = true;
+val test29 = all_same_color([(Clubs, Ace),
+                             (Spades, King),
+                             (Hearts, Num 4)]) = false;
+val test30 = all_same_color([(Diamonds, Ace),
+                             (Diamonds, Queen),
+                             (Hearts, Num 4)]) = true;
+val test31 = all_same_color([(Diamonds, Ace),
+                             (Spades, Jack),
+                             (Hearts, Num 5)]) = false;
+                                

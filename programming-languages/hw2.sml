@@ -46,7 +46,28 @@ fun get_substitutions2(substitutions, s) =
                             | NONE => helper(subs', s, acc))
   in
       helper(substitutions, s, [])
-  end
+  end;
+
+(* string list list * (string * string * string) -> (string * string * string) list
+   produces a list of full name records {first, middle, last} using the given
+   string list list of substitutions and the given full name record. *)
+fun similar_names(substitutions, full_name) =
+  let fun helper(firsts, middle, last, acc) =
+        case firsts of
+            [] => acc
+          | first::firsts' => helper(firsts', middle, last,
+                                     {first=first, middle=middle, last=last}::acc)
+  in
+      case full_name of
+          {a, b, c} =>
+          let
+              val first_subs = get_substitutions2(substitutions, a)
+              val acc = full_name
+          in
+              case first_subs of
+                  s::firsts => acc :: {first=s, middle=b, 
+          end
+  end;
                       
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)

@@ -108,3 +108,23 @@ val test31 = all_same_color([(Diamonds, Ace),
                              (Spades, Jack),
                              (Hearts, Num 5)]) = false;
                                 
+val test32 = sum_cards([]) = 0;
+val test33 = sum_cards([(Clubs, Ace),
+                        (Diamonds, King),
+                        (Spades, Num 5)]) = 26;
+val test34 = sum_cards([(Hearts, Queen),
+                        (Hearts, Jack),
+                        (Hearts, Num 10)]) = 30;
+val test35 = sum_cards([(Clubs, Num 2)]) = 2;
+
+val test36 = score([(Clubs, Queen),
+                    (Hearts, King)], 4) = 48;
+val test37 = score([(Clubs, Queen),
+                    (Hearts, King)], 21) = 1;
+val test38 = score([(Clubs, Queen),
+                    (Spades, King)], 4) = 24;
+val test39 = score([(Hearts, Queen),
+                    (Diamonds, King)], 22) = 1;
+val test40 = score([(Clubs, Num 2),
+                    (Hearts, Num 3)], 5) = 0;
+

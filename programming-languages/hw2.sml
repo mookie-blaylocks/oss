@@ -65,7 +65,7 @@ fun similar_names(substitutions, full_name) =
               val acc = full_name
           in
               case first_subs of
-                  s::firsts => acc :: {first=s, middle=b, 
+                  s::firsts => acc :: {first=s, middle=b, last=c}
           end
   end;
                       

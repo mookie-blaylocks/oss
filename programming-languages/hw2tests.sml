@@ -56,8 +56,3 @@ val test13 = similar_names([["Jimmy","James","Jim"],
              [{first="Rob",middle="James",last="Richardson"},
               {first="Bob",middle="James",last="Richardson"},
               {first="Bobby",middle="James",last="Richardson"}];
-
-
-                
-                 
-              

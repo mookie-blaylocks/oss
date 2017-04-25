@@ -39,44 +39,49 @@ datatype typ = Anything
 (* string list -> string list
    produce a list of strings that filters the given list such that
    only the strings beginning with a capital letter are included *)
-fun only_capitals(sl : string list) =
-  [];
+fun only_capitals(xs : string list) =
+  List.filter (fn x => Char.isUpper( String.sub(x, 0))) xs;
 
 (* string list -> string
    produce the string from the list that is the longest. 
    Ties favor the beginning of the string. *)
-fun longest_string1(sl : string list) =
-  "";
+fun longest_string1 ( sl : string list ) =
+  List.foldl (fn (acc, x) => if String.size acc > String.size x then acc else x)
+             "" sl;
 
 (* string list -> string
    produce the longest string from the given list.
    Ties favor the end of the list. *)
-fun longest_string2(sl : string list) =
-  "";
+fun longest_string2 ( sl : string list ) =
+  List.foldl (fn (acc, x) => if String.size x > String.size acc then x else acc)
+             "" sl;
 
 (* (int * int -> bool) -> string list -> string
    If given a comparative function, returns the longest string
    in the given list *)
-fun longest_string_helper(f : int * int -> bool, sl : string list) =
-  "";
+val longest_string_helper =
+  fn f => fn sl => List.foldl f "" sl;
 
 (* string list -> string
    Mimic longest_string1 using val bindings and partial
    applications of longest_string_helper *)
-fun longest_string3(sl: string list) =
-  "";
+val longest_string3 = longest_string_helper ( fn ( acc , x ) =>
+                                                 if String.size acc > String.size x
+                                                 then acc
+                                                 else x)
 
 (* string list -> string
    Mimic longest_string2 using val bindings and partial
    application of longest_string_helper *)
-fun longest_string4(sl : string list) =
-  "";
+val longest_string4 = longest_string_helper (fn (acc, x) =>
+                                                if String.size x > String.size acc
+                                                then x
+                                                else acc)
 
 (* string list -> string
    produce the longest string in the list that begins with a
    capital letter. Produce "" if there are no such strings. *)
-fun longest_capital(sl : string list) =
-  "";
+val longest_capital = longest_string3 o only_capitals;
 
 (* string -> string
    produce a string that is the reverse of the given string. *)
@@ -96,4 +101,3 @@ fun first_answer(f : 'a * 'b option, xs : 'a list) =
    Else produce NONE. *)
 fun all_answers(f : 'a * 'b option, xs : 'a list) =
   [];
-

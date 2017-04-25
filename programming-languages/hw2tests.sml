@@ -127,4 +127,3 @@ val test39 = score([(Hearts, Queen),
                     (Diamonds, King)], 22) = 1;
 val test40 = score([(Clubs, Num 2),
                     (Hearts, Num 3)], 5) = 0;
-

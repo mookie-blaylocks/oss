@@ -59,6 +59,7 @@ fun similar_names(substitutions, full_name:{first:string,middle:string,last:stri
           | f::first_subs' => {first=f, middle=m, last=l}::(helper(first_subs',m,l))
   in
       case full_name of
+
           {first=f, middle=m, last=l} => let
            val first_subs = f::get_substitutions2(substitutions, f)
        in

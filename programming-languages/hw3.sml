@@ -85,19 +85,38 @@ val longest_capital = longest_string3 o only_capitals;
 
 (* string -> string
    produce a string that is the reverse of the given string. *)
-fun rev_string(s : string) =
-  "";
+fun rev_string ( s : string ) =
+  String.implode(List.rev(String.explode(s)));
 
 (* ('a * 'b option) -> 'a list -> 'b
    produce the first occurence of a value in the 'a list that
    creates SOME value when the function is applied. If each 
    'a list element is NONE, raise NoAnswer exception. *)
-fun first_answer(f : 'a * 'b option, xs : 'a list) =
-  [];
+val first_answer = fn f => fn xs =>
+                      let
+                          fun helper (f, xs) =
+                            case xs of
+                                [] => raise NoAnswer
+                              | x::xs' => case f x of
+                                              NONE => helper( f, xs')
+                                            | SOME v => v
+                      in
+                          helper (f, xs)
+                      end
 
 (* ('a * 'b option) -> 'a list -> 'b list option
    produce SOME map from 'a list to 'b list if
    the function produces SOME value for all 'a.
    Else produce NONE. *)
-fun all_answers(f : 'a * 'b option, xs : 'a list) =
-  [];
+val all_answers = fn f => fn xs =>
+                     let fun helper (f, acc, xs) =
+                           case xs of
+                               [] => SOME acc
+                             | x::xs' => case f x of
+                                             NONE => NONE
+                                           | SOME v => helper(f, v::acc, xs')
+                     in
+                         helper(f, [], xs)
+                     end
+                                                             
+  

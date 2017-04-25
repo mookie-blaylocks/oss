@@ -25,3 +25,21 @@ val test14 = longest_capital(["Chas","hello","goodbye"]) = "Chas";
 val test15 = longest_capital(["Chas","Drew","goobye"]) = "Chas";
 val test16 = longest_capital(["hello","goodbye"]) = "";
 val test17 = longest_capital(["Chas","Louise","goodbye"]) = "Louise";
+
+val test18 = rev_string("Chas") = "sahC";
+val test19 = rev_string("Louise") = "esiuoL";
+val test20 = rev_string("Happy little bears") = "sraeb elttil yppaH";
+
+fun helper (s) =
+  case s of
+      "" => NONE
+    | s => SOME s
+                
+val test22 = first_answer helper ["","",""] = ""
+             handle NoAnswer => true;
+val test23 = first_answer helper ["","Chas","Louise"] = "Chas";
+
+val test24 = all_answers helper ["Chas","Louise","Drew"] =
+             SOME ["Drew","Louise","Chas"];
+val test25 = all_answers helper ["Chas","Louise",""] = NONE;
+                                       

@@ -154,7 +154,7 @@ fun score(cs : card list, goal : int) =
 fun officiate(cs : card list, ms : move list, goal : int) =
   let fun draw(deck: card list, hand: card list) =
         case deck of (* can ignore empty case as it is handle by if below *)
-          | c::deck' => (deck', c::hand)
+          c::deck' => (deck', c::hand)
       fun play (dl : card list, hl : card list, ml : move list, g : int) =
         case ml of
             [] => score(hl, g)

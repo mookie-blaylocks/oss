@@ -155,13 +155,6 @@
                             (call (var "inner-map") (snd (var "mupls"))))))))
 
 
-
-(define mupl-mapAddN
-  (fun #f "i"
-       (fun #f "is"
-            (call (call mupl-map (fun #f "x" (add (var "x") (var "i"))))
-                  (var "is")))))
-
 ;; Challenge Problem
 
 (struct fun-challenge (nameopt formal body freevars) #:transparent) ;; a recursive(?) 1-argument function

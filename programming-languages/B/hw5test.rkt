@@ -160,6 +160,9 @@
    (check-equal? (eval-exp (ifaunit (aunit) (int 2) (int 3)))
                  (int 2)
                  "ifaunit test")
+   (check-equal? (eval-exp (ifaunit (snd (apair (int 1) (aunit))) (int 2) (int 3)))
+                 (int 2)
+                 "ifaunit test")
    
    ;; mlet* test
    (check-equal? (eval-exp (mlet* (list (cons "x" (int 10))) (var "x")))
@@ -183,7 +186,13 @@
                  "ifeq test")
    
    ;; mupl-map test
-   (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 7)))) (apair (int 1) (aunit)))) 
+   (check-equal? (eval-exp
+                  (call
+                   (call mupl-map
+                         (fun #f
+                              "x"
+                              (add (var "x")(int 7))))
+                   (apair (int 1) (aunit))))
                  (apair (int 8) (aunit)) "mupl-map test")
    
    ;; problems 1, 2, and 4 combined test

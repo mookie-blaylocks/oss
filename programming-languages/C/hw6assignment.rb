@@ -36,6 +36,22 @@ class MyPiece < Piece
   end
 end
 
+class CheatPiece < MyPiece
+
+  Cheat_Piece = [
+    [[[0, 0]]]]
+
+  def initialize (point_array, board)
+    super(point_array, board, 1)
+  end
+
+  def self.next_piece (board)
+    new_piece = Cheat_Piece.sample
+    CheatPiece.new(new_piece, board)
+  end
+end
+
+
 class MyBoard < Board
   # your enhancements here
   def initialize (game)
@@ -44,6 +60,7 @@ class MyBoard < Board
     @score = 0
     @game = game
     @delay = 500
+    @cheating = false
   end
 
   #move the current block 180 degrees
@@ -54,7 +71,14 @@ class MyBoard < Board
 
   #gets the next piece
   def next_piece
-    @current_block = MyPiece.next_piece(self)
+
+    if @cheating
+      @current_block = CheatPiece.next_piece(self)
+      @cheating = false
+    else
+      @current_block = MyPiece.next_piece(self)
+    end
+
     @current_pos = nil
   end
 
@@ -73,6 +97,12 @@ class MyBoard < Board
     @delay = [@delay - 2, 80].max
   end
 
+  def cheat
+    if @score >= 100 and not @cheating
+      @cheating = true
+      @score -= 100
+    end
+  end
 end
 
 class MyTetris < Tetris
@@ -90,6 +120,7 @@ class MyTetris < Tetris
   def key_bindings
     super
     @root.bind('u', proc {@board.rotate_180})
+    @root.bind('c', proc {@board.cheat})
   end
 end
 

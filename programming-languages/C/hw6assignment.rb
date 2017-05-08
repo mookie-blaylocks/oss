@@ -89,7 +89,7 @@ class MyTetris < Tetris
 
   def key_bindings
     super
-    @root.bind('c', proc {@board.rotate_180})
+    @root.bind('u', proc {@board.rotate_180})
   end
 end
 

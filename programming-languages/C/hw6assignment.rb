@@ -4,6 +4,7 @@
 # part of your solution.
 
 class MyPiece < Piece
+  attr_reader :len
   # The constant All_My_Pieces should be declared here
   All_My_Pieces = [
     [[[0, 0], [1, 0], [0, 1], [1, 1]]],  # square (only needs one)
@@ -29,10 +30,6 @@ class MyPiece < Piece
   def self.next_piece (board)
     new_piece = All_My_Pieces.sample
     MyPiece.new(new_piece, board, new_piece[0].length)
-  end
-
-  def len
-    @len
   end
 end
 

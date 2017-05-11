@@ -34,7 +34,7 @@ class GeometryValue
   # do *not* change methods in this class definition
   # you can add methods if you wish
 
-  private
+#  private
   # some helper methods that may be generally useful
   def real_close(r1,r2) 
     (r1 - r2).abs < GeometryExpression::Epsilon
@@ -155,6 +155,7 @@ class Point < GeometryValue
     e = GeometryExpression::Epsilon
     if (seg.x1 - e <= x) and (x <= seg.x2 + e)
       Point.new(x,y)
+    else NoPoints.new
     end
   end
 end
@@ -312,7 +313,12 @@ class LineSegment < GeometryValue
     end
   end
   def intersectWithSegmentAsLineResult seg
-    self #TODO
+    e = GeometryExpression::Epsilon
+    l = two_points_to_line(x1,y1,x2,y2)
+    if ((((x1 - e <= seg.x1) and (seg.x1 <= x2 + e)) or ((x1 - e <= seg.x2) and (seg.x2 <= x2 + e)) or ((seg.x1 - e <= x1) and (x1 <= seg.x2 + e)) or ((seg.x1 - e <= x2) and (x2 <= seg.x2 + e))) and (((y1 - e <= seg.y1) and (seg.y1 <= y2 + e)) or ((y1 - e <= seg.y2) and (seg.y2 <= y2 + e)) or ((seg.y1 - e <= y1) and (y1 <= seg.y2 + e)) or ((seg.y1 - e <= y2) and (y2 <= seg.y2 + e))))
+      l.intersect seg
+    else NoPoints.new
+    end
   end
 end
 
@@ -326,11 +332,10 @@ class Intersect < GeometryExpression
     @e2 = e2
   end
   def preprocess_prog
-    @e1 = e1.preprocess_prog
-    @e2 = e2.preprocess_prog
+    Intersect.new(@e1.preprocess_prog, @e2.preprocess_prog)
   end
   def eval_prog env
-    e1.intersect e2
+    @e1.eval_prog(env).intersect (@e2.eval_prog(env))
   end
 end
 
@@ -344,12 +349,11 @@ class Let < GeometryExpression
     @e2 = e2
   end
   def preprocess_prog
-    @e1 = e1.preprocess_prog
-    @e2 = e2.preprocess_prog
+    Let.new(@s, @e1.preprocess_prog, @e2.preprocess_prog)
   end
   def eval_prog env
-    new_env = env + [[Var.new(s), e1.eval_prog(env)]]
-    e2.eval_prog new_env
+    new_env = [[@s, @e1.eval_prog(env)]] + env
+    @e2.eval_prog new_env
   end
 end
 
@@ -378,9 +382,9 @@ class Shift < GeometryExpression
     @e = e
   end
   def preprocess_prog
-    @e = e.preprocess_prog
+    Shift.new(@dx,@dy,@e.preprocess_prog)
   end
   def eval_prog env
-    e.shift(dx,dy)
+    @e.shift(@dx,@dy)
   end
 end

@@ -199,51 +199,60 @@ d4 = d.intersect(LineSegment.new(-THREE,-FOUR,ONE,TWO))
 if not (((d4.is_a? LineSegment)) and d4.x1 == -THREE and d4.y1 == -FOUR and d4.x2 == ONE and d4.y2 == TWO)	
 	puts "LineSegment intersect not working properly"
 end
-# d5 = d.intersect(LineSegment.new(TWO,THREE,FOUR,FIVE))
-# if not ((d5.is_a? NoPoints))
-# 	puts "LineSegment intersect not working properly"
-# end
+d5 = d.intersect(LineSegment.new(TWO,THREE,FOUR,FIVE))
+if not ((d5.is_a? NoPoints))
+	puts "LineSegment intersect not working properly"
+end
 
-# #Intersect Tests
-# i = Intersect.new(LineSegment.new(-ONE,-TWO,THREE,FOUR), LineSegment.new(THREE,FOUR,-ONE,-TWO))
-# i1 = i.preprocess_prog.eval_prog([])
-# if not (i1.x1 == -ONE and i1.y1 == -TWO and i1.x2 == THREE and i1.y2 == FOUR)
-# 	puts "Intersect eval_prog should return the intersect between e1 and e2"
-# end
+#Intersect Tests
+i = Intersect.new(LineSegment.new(-ONE,-TWO,THREE,FOUR), LineSegment.new(THREE,FOUR,-ONE,-TWO))
+i1 = i.preprocess_prog.eval_prog([])
+if not (i1.x1 == -ONE and i1.y1 == -TWO and i1.x2 == THREE and i1.y2 == FOUR)
+	puts "Intersect eval_prog should return the intersect between e1 and e2"
+end
 
-# #Var Tests
-# v = Var.new("a")
-# v1 = v.eval_prog([["a", Point.new(THREE,FIVE)]])
-# if not ((v1.is_a? Point) and v1.x == THREE and v1.y == FIVE)
-# 	puts "Var eval_prog is not working properly"
-# end 
-# if not (v.preprocess_prog == v)
-# 	puts "Var preprocess_prog should return self"
-# end
+#Var Tests
+v = Var.new("a")
+v1 = v.eval_prog([["a", Point.new(THREE,FIVE)]])
+if not ((v1.is_a? Point) and v1.x == THREE and v1.y == FIVE)
+	puts "Var eval_prog is not working properly"
+end 
+if not (v.preprocess_prog == v)
+	puts "Var preprocess_prog should return self"
+end
 
-# #Let Tests
-# l = Let.new("a", LineSegment.new(-ONE,-TWO,THREE,FOUR),
-#              Intersect.new(Var.new("a"),LineSegment.new(THREE,FOUR,-ONE,-TWO)))
-# l1 = l.preprocess_prog.eval_prog([])
-# if not (l1.x1 == -ONE and l1.y1 == -TWO and l1.x2 == THREE and l1.y2 == FOUR)
-# 	puts "Let eval_prog should evaluate e2 after adding [s, e1] to the environment"
-# end
+#Let Tests
+l2 = Let.new("a", LineSegment.new(-ONE,-TWO,THREE,FOUR),
+             Var.new("a"))
+l3 = l2.preprocess_prog.eval_prog([])
+if not (l3.x1 == -ONE and l3.y1 == -TWO and l3.x2 == THREE and l3.y2 == FOUR)
+  puts "Let expression is wrong"
+end
 
-# #Let Variable Shadowing Test
-# l2 = Let.new("a", LineSegment.new(-ONE, -TWO, THREE, FOUR),
-#               Let.new("b", LineSegment.new(THREE,FOUR,-ONE,-TWO), Intersect.new(Var.new("a"),Var.new("b"))))
-# l2 = l2.preprocess_prog.eval_prog([["a",Point.new(0,0)]])
-# if not (l2.x1 == -ONE and l2.y1 == -TWO and l2.x2 == THREE and l2.y2 == FOUR)
-# 	puts "Let eval_prog should evaluate e2 after adding [s, e1] to the environment"
-# end
+l = Let.new("a", LineSegment.new(-ONE,-TWO,THREE,FOUR),
+             Intersect.new(Var.new("a"),LineSegment.new(THREE,FOUR,-ONE,-TWO)))
+l1 = l.preprocess_prog.eval_prog([])
+if not (l1.x1 == -ONE and l1.y1 == -TWO and l1.x2 == THREE and l1.y2 == FOUR)
+	puts "Let eval_prog should evaluate e2 after adding [s, e1] to the environment"
+end
 
-
-# #Shift Tests
-# s = Shift.new(THREE,FIVE,LineSegment.new(-ONE,-TWO,THREE,FOUR))
-# s1 = s.preprocess_prog.eval_prog([])
-# if not (s1.x1 == TWO and s1.y1 == THREE and s1.x2 == SIX and s1.y2 == 9)
-# 	puts "Shift should shift e by dx and dy"
-# end
-
+#Let Variable Shadowing Test
+l2 = Let.new("a", LineSegment.new(-ONE, -TWO, THREE, FOUR),
+              Let.new("b", LineSegment.new(THREE,FOUR,-ONE,-TWO), Intersect.new(Var.new("a"),Var.new("b"))))
+l2 = l2.preprocess_prog.eval_prog([["a",Point.new(0,0)]])
+if not (l2.x1 == -ONE and l2.y1 == -TWO and l2.x2 == THREE and l2.y2 == FOUR)
+	puts "Let eval_prog should evaluate e2 after adding [s, e1] to the environment"
+end
 
 
+#Shift Tests
+sp = Shift.new(THREE,ONE,Point.new(ONE,THREE))
+s2 = sp.preprocess_prog.eval_prog([])
+if not (s2.x == FOUR and s2.y == FOUR)
+  puts "Shift point incorrect"
+end
+s = Shift.new(THREE,FIVE,LineSegment.new(-ONE,-TWO,THREE,FOUR))
+s1 = s.preprocess_prog.eval_prog([])
+if not (s1.x1 == TWO and s1.y1 == THREE and s1.x2 == SIX and s1.y2 == 9)
+	puts "Shift should shift e by dx and dy"
+end

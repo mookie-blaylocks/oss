@@ -96,6 +96,83 @@ if not ((c3.is_a? NoPoints))
 end
 
 #LineSegment Tests
+seg1 = LineSegment.new(ONE,TWO,THREE,FOUR)
+pt1 = Point.new(TWO,THREE)
+sp1 = seg1.intersect pt1
+if not (sp1.x == TWO and sp1.y == THREE)
+  puts "Segment/Point positive not working"
+end
+ps1 = pt1.intersect seg1
+if not (ps1.x == TWO and ps1.y == THREE)
+  puts "Point/Segment positive not working"
+end
+pt2 = Point.new(ONE,ONE)
+sp2 = seg1.intersect pt2
+if not sp2.instance_of? NoPoints
+  puts "Segment/Point negative not working"
+end
+ps2 = pt2.intersect seg1
+if not ps2.instance_of? NoPoints
+  puts "Point/Segment negative not working"
+end
+
+ln1 = Line.new(ONE, ONE)
+sl1 = seg1.intersect ln1
+if not (sl1.x1 == ONE and sl1.y1 == TWO and sl1.x2 == THREE and sl1.y2 == FOUR)
+  puts "Segment of line not working"
+end
+ls1 = ln1.intersect seg1
+if not (ls1.x1 == ONE and ls1.y1 == TWO and ls1.x2 == THREE and ls1.y2 == FOUR)
+  puts "Segment of line not working 2"
+end
+ln2 = Line.new(-ONE,FIVE)
+sl2 = seg1.intersect ln2
+if not (sl2.x == TWO and sl2.y == THREE)
+  puts "Segment/line point intersection not working"
+end
+ls2 = ln2.intersect seg1
+if not (ls2.x == TWO and ls2.y == THREE)
+  puts "Segment/line point intersection not working 2"
+end
+ln3 = Line.new(ONE,ZERO)
+sl3 = seg1.intersect ln3
+if not (sl3.instance_of? NoPoints)
+  puts "Segment/line miss not working properly"
+end
+ls3 = ln3.intersect seg1
+if not (ls3.instance_of? NoPoints)
+  puts "Segment/line miss not working properly 2"
+end
+
+vl1 = VerticalLine.new(TWO)
+sv1 = seg1.intersect vl1
+if not (sv1.x == TWO and sv1.y == THREE)
+  puts "Segment/vertical point intersection not working"
+end
+vs1 = vl1.intersect seg1
+if not (vs1.x == TWO and vs1.y == THREE)
+  puts "Segment/vertical point intersection not working 2"
+end
+seg2 = LineSegment.new(TWO,TWO,TWO,FOUR)
+sv2 = seg2.intersect vl1
+if not (sv2.x1 == TWO and sv2.y1 == TWO and sv2.x2 == TWO and sv2.y2 == FOUR)
+  puts "Segment/vertical overlap not working"
+end
+vs2 = vl1.intersect seg2
+if not (vs2.x1 == TWO and vs2.y1 == TWO and vs2.x2 == TWO and vs2.y2 == FOUR)
+  puts "Segment/vertical overlap not working 2"
+end
+vl2 = VerticalLine.new(THREE)
+sv3 = seg2.intersect vl2
+if not sv3.instance_of? NoPoints
+  puts "Segment/vertical miss not working"
+end
+vs3 = vl2.intersect seg2
+if not vs3.instance_of? NoPoints
+  puts "Segment/vertical miss not working 2"
+end
+
+  
 d = LineSegment.new(ONE,TWO,-THREE,-FOUR)
 if not (d.eval_prog([]) == d)
 	puts "LineSegement eval_prog should return self"
@@ -145,6 +222,13 @@ if not (v.preprocess_prog == v)
 end
 
 #Let Tests
+l2 = Let.new("a", LineSegment.new(-ONE,-TWO,THREE,FOUR),
+             Var.new("a"))
+l3 = l2.preprocess_prog.eval_prog([])
+if not (l3.x1 == -ONE and l3.y1 == -TWO and l3.x2 == THREE and l3.y2 == FOUR)
+  puts "Let expression is wrong"
+end
+
 l = Let.new("a", LineSegment.new(-ONE,-TWO,THREE,FOUR),
              Intersect.new(Var.new("a"),LineSegment.new(THREE,FOUR,-ONE,-TWO)))
 l1 = l.preprocess_prog.eval_prog([])
@@ -162,11 +246,13 @@ end
 
 
 #Shift Tests
+sp = Shift.new(THREE,ONE,Point.new(ONE,THREE))
+s2 = sp.preprocess_prog.eval_prog([])
+if not (s2.x == FOUR and s2.y == FOUR)
+  puts "Shift point incorrect"
+end
 s = Shift.new(THREE,FIVE,LineSegment.new(-ONE,-TWO,THREE,FOUR))
 s1 = s.preprocess_prog.eval_prog([])
 if not (s1.x1 == TWO and s1.y1 == THREE and s1.x2 == SIX and s1.y2 == 9)
 	puts "Shift should shift e by dx and dy"
 end
-
-
-
